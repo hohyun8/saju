@@ -4,7 +4,6 @@ import { analyzeSaju } from './utils/gemini';
 import SajuInputStep from './components/SajuInputStep';
 import SajuResultComponent from './components/SajuResult';
 
-const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
 function LoadingSpinner() {
   return (
@@ -114,11 +113,7 @@ export default function App() {
       setShowRaw(false);
 
       try {
-        const { result: parsed, rawText: raw } = await analyzeSaju(
-          GEMINI_API_KEY,
-          input,
-          (chunk) => setRawText(chunk)
-        );
+        const { result: parsed, rawText: raw } = await analyzeSaju(input);
 
         setRawText(raw);
 
