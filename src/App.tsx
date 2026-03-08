@@ -144,7 +144,7 @@ export default function App() {
         setLoading(false);
       }
     },
-    [apiKey]
+    []
   );
 
   const handleReset = useCallback(() => {
