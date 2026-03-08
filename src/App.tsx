@@ -136,10 +136,12 @@ export default function App() {
         }
       } catch (err) {
         const msg = err instanceof Error ? err.message : String(err);
-        if (msg.includes('401') || msg.toLowerCase().includes('api key')) {
+        if (msg.includes('401') || msg.toLowerCase().includes('api key') || msg.toLowerCase().includes('api_key')) {
           setError('API 키가 올바르지 않습니다. 키를 확인하고 다시 시도해주세요.');
-        } else if (msg.includes('network') || msg.includes('fetch')) {
-          setError('네트워크 오류가 발생했습니다. 인터넷 연결을 확인해주세요.');
+        } else if (msg.toLowerCase().includes('403') || msg.toLowerCase().includes('permission') || msg.toLowerCase().includes('quota')) {
+          setError(`API 권한 오류: ${msg}`);
+        } else if (msg.toLowerCase().includes('failed to fetch') || msg.toLowerCase().includes('networkerror')) {
+          setError(`네트워크 오류: Google API에 연결할 수 없습니다. VPN/방화벽을 확인하거나 브라우저 콘솔(F12)에서 상세 오류를 확인하세요.\n(${msg})`);
         } else {
           setError(`오류가 발생했습니다: ${msg}`);
         }
