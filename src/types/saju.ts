@@ -42,4 +42,4 @@ export interface SajuInput {
   time: string;
 }
 
-export type AppStep = 'api-key' | 'saju-input' | 'result';
+export type AppStep = 'saju-input' | 'result';

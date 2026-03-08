@@ -1,9 +1,10 @@
 import { useState, useCallback } from 'react';
 import type { AppStep, SajuInput, SajuResult } from './types/saju';
 import { analyzeSaju } from './utils/gemini';
-import ApiKeyStep from './components/ApiKeyStep';
 import SajuInputStep from './components/SajuInputStep';
 import SajuResultComponent from './components/SajuResult';
+
+const GEMINI_API_KEY = import.meta.env.VITE_GEMINI_API_KEY as string;
 
 function LoadingSpinner() {
   return (
@@ -95,19 +96,13 @@ function RawFallback({ text, onReset }: { text: string; onReset: () => void }) {
 }
 
 export default function App() {
-  const [step, setStep] = useState<AppStep>('api-key');
-  const [apiKey, setApiKey] = useState('');
+  const [step, setStep] = useState<AppStep>('saju-input');
   const [lastInput, setLastInput] = useState<SajuInput | null>(null);
   const [result, setResult] = useState<SajuResult | null>(null);
   const [rawText, setRawText] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
   const [showRaw, setShowRaw] = useState(false);
-
-  const handleApiKey = useCallback((key: string) => {
-    setApiKey(key);
-    setStep('saju-input');
-  }, []);
 
   const handleAnalyze = useCallback(
     async (input: SajuInput) => {
@@ -120,7 +115,7 @@ export default function App() {
 
       try {
         const { result: parsed, rawText: raw } = await analyzeSaju(
-          apiKey,
+          GEMINI_API_KEY,
           input,
           (chunk) => setRawText(chunk)
         );
@@ -171,8 +166,6 @@ export default function App() {
 
   return (
     <>
-      {step === 'api-key' && <ApiKeyStep onSubmit={handleApiKey} />}
-
       {step === 'saju-input' && (
         <SajuInputStep onSubmit={handleAnalyze} loading={loading} />
       )}
